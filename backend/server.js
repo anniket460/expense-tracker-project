@@ -1,23 +1,20 @@
+// backend/server.js
 require("dotenv").config();
-const connectDB = require("./config/db");
-connectDB();
-
 const express = require("express");
 const cors = require("cors");
 
-const app = express();
+const connectDB = require("./config/db");
+const userRoutes = require("./routes/userRoutes");
 
-// Middleware
+const app = express();
+connectDB();
+
 app.use(cors());
 app.use(express.json());
 
-// Route
-app.get("/", (req, res) => {
-  res.json({ ok: true, msg: "Backend running" });
-});
+app.get("/", (req, res) => res.json({ ok: true, msg: "Backend running" }));
+
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
